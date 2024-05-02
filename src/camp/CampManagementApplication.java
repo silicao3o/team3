@@ -255,8 +255,11 @@ public class CampManagementApplication {
         for(Student student : studentStore){
             if(studentId.equals(student.getStudentId())){
                 for (int i = 1; i < student.getSubjects().size(); i++){
-                    System.out.println(i + "." + student.getSubjects().get(i).getSubjectName());
+                    System.out.println(i + "." + student.getSubjects().get(i-1).getSubjectName());
                 }
+                int input = Integer.parseInt(sc.next()); // 과목선택
+                //input을 인덱스 값으로 받아서 student 클래스에 저장되어있는 수강목록 리스트에 접근해서 과목 찾기
+
                 //점수에 따른 등급 설정 (필수 과목일시. 선택 과목일 시)
                 //점수 입력
                 //등급 저장
