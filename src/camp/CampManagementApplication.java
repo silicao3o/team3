@@ -218,6 +218,7 @@ public class CampManagementApplication {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
         // 기능 구현
+
         System.out.println("\n점수 등록 성공!");
     }
 
