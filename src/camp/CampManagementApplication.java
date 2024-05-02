@@ -169,9 +169,10 @@ public class CampManagementApplication {
         System.out.println("\n수강생을 등록합니다...");
         System.out.print("수강생 이름 입력: ");
         String studentName = sc.next();
+        List<Subject> subjectList = new ArrayList<>();
         // 기능 구현 (필수 과목, 선택 과목)
 
-        Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName); // 수강생 인스턴스 생성 예시 코드
+        Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName, subjectList); // 수강생 인스턴스 생성 예시 코드
         // 기능 구현
         System.out.println("수강생 등록 성공!\n");
     }
@@ -217,7 +218,21 @@ public class CampManagementApplication {
     private static void createScore() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
-        // 기능 구현
+        for(Student subject : studentStore){
+            if(studentId.equals(subject.getStudentId())){
+                for (int i = 1; i < /*수강목록 갯수 */; i++){
+                    System.out.println(i + "." + );
+                }
+                //점수에 따른 등급 설정 (필수 과목일시. 선택 과목일 시)
+                //점수 입력
+                //등급 저장
+            }
+        }
+
+
+
+
+
 
         System.out.println("\n점수 등록 성공!");
     }
