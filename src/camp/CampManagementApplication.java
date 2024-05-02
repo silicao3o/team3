@@ -109,6 +109,7 @@ public class CampManagementApplication {
     /**
      * index 자동 증가
      */
+    // 고유번호 만들 수 있음, 학생, 과목, 점수 ->
     private static String sequence(String type) {
         switch (type) {
             case INDEX_TYPE_STUDENT -> {
@@ -254,15 +255,61 @@ public class CampManagementApplication {
         System.out.println("시험 점수를 등록합니다...");
         for(Student student : studentStore){
             if(studentId.equals(student.getStudentId())){
-                for (int i = 1; i < student.getSubjects().size(); i++){
+                for (int i = 1; i <= student.getSubjects().size(); i++){
                     System.out.println(i + "." + student.getSubjects().get(i-1).getSubjectName());
                 }
-                int input = Integer.parseInt(sc.next()); // 과목선택
+                int input = Integer.parseInt(sc.next());// 과목선택
+                Subject subject = student.getSubjects().get(input-1);
                 //input을 인덱스 값으로 받아서 student 클래스에 저장되어있는 수강목록 리스트에 접근해서 과목 찾기
+                subject.getSubjectName();
+                System.out.println("점수를 등록하려는 과목이 맞으신가요? 과목: " + subject.getSubjectName());
 
-                //점수에 따른 등급 설정 (필수 과목일시. 선택 과목일 시)
-                //점수 입력
-                //등급 저장
+               int score = Integer.parseInt(sc.next()); //점수 입력
+               char rank = 'N';
+                //수강과목이 필수 또는 선택에 따라서 등급 차등
+                if(subject.getSubjectType().equals(SUBJECT_TYPE_MANDATORY)){
+                    if (score >= 95 && score <= 100){
+                        rank = 'A';
+                    }
+                    else if (score >= 90 && score < 95){
+                        rank = 'B';
+                    }
+                    else if (score >= 80 && score < 90){
+                        rank = 'C';
+                    }
+                    else if (score >= 70 && score < 80){
+                        rank = 'D';
+                    } else if (score >= 60 && score < 70) {
+                        rank = 'F';
+                    }
+                    else{
+                        rank = 'N';
+                    }
+                }
+                else if(subject.getSubjectType().equals(SUBJECT_TYPE_CHOICE)){
+                    switch (score/10){
+                        case 10:
+                        case 9:
+                            rank = 'A';
+                            break;
+                        case 8:
+                            rank = 'B';
+                            break;
+                        case 7:
+                            rank = 'C';
+                            break;
+                        case 6:
+                            rank = 'D';
+                            break;
+                        case 5:
+                            rank = 'F';
+                            break;
+                        default:
+                            rank = 'N';
+                    }
+                }
+                Score score1 = new Score(sequence(INDEX_TYPE_SCORE),scoreIndex,rank,studentId,subject.getSubjectId());
+                scoreStore.add(score1); //등급 저장
             }
         }
         System.out.println("\n점수 등록 성공!");
