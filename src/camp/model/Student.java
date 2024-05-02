@@ -1,6 +1,6 @@
 package camp.model;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class Student {
@@ -10,6 +10,7 @@ public class Student {
     public Student(String seq, String studentName, List<Subject> subjects) {
         this.studentId = seq;
         this.studentName = studentName;
+        this.subjects = subjects;
     }
 
     // Getter
@@ -21,4 +22,5 @@ public class Student {
         return studentName;
     }
 
+    public List<Subject> getSubjects() {return subjects;}
 }

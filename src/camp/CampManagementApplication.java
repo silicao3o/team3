@@ -214,14 +214,19 @@ public class CampManagementApplication {
         return sc.next();
     }
 
+    //수강생 id로 수강생 찾기
+
+
+
+
     // 수강생의 과목별 시험 회차 및 점수 등록
     private static void createScore() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
-        for(Student subject : studentStore){
-            if(studentId.equals(subject.getStudentId())){
-                for (int i = 1; i < /*수강목록 갯수 */; i++){
-                    System.out.println(i + "." + );
+        for(Student student : studentStore){
+            if(studentId.equals(student.getStudentId())){
+                for (int i = 1; i < student.getSubjects().size(); i++){
+                    System.out.println(i + "." + student.getSubjects().get(i).getSubjectName());
                 }
                 //점수에 따른 등급 설정 (필수 과목일시. 선택 과목일 시)
                 //점수 입력
