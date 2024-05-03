@@ -2,18 +2,22 @@ package camp.model;
 
 public class Score{
 
-    private String scoreId;
-    private int testCount; // 시험회차
-    private char rank; // 등급
-    private String studentId;
     private String subjectId;
+    private String studentId;
+    private String scoreId;
+    private int testCount;
+    private int score;// 시험회차
+    private char rank; // 등급
 
-    public Score(String seq, int testCount, char rank, String studentId, String subjectId) {
-        this.scoreId = seq;
-        this.testCount = testCount;
-        this.rank = rank;
-        this.studentId = studentId;
+
+
+    public Score(String subjectId, String studentId, String scoreId, int testCount, int score,char rank) {
         this.subjectId = subjectId;
+        this.studentId = studentId;
+        this.scoreId = scoreId;
+        this.testCount = testCount;
+        this.score = score;
+        this.rank = rank;
     }
 
     // Getter

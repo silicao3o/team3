@@ -55,13 +55,10 @@ public class CampManagementApplication {
      * 초기 데이터 생성
      */
     private static void setInitData() {
+        /*String s = "S"; // String s = new String (S); */
         studentStore = new ArrayList<>();
-        subjectStore = List.of(
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "Java",
-                        SUBJECT_TYPE_MANDATORY
-                ),
+        subjectStore = List.of( //수정 불가능
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY),
                 new Subject(
                         sequence(INDEX_TYPE_SUBJECT),
                         "객체지향",
@@ -249,7 +246,7 @@ public class CampManagementApplication {
 
 
 
-    // 수강생의 과목별 시험 회차 및 점수 등록
+    // 수강생의 과목별 시험 회차 및 점수 등록 회차 빠짐
     private static void createScore() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
@@ -279,7 +276,8 @@ public class CampManagementApplication {
                     }
                     else if (score >= 70 && score < 80){
                         rank = 'D';
-                    } else if (score >= 60 && score < 70) {
+                    }
+                    else if (score >= 60 && score < 70) {
                         rank = 'F';
                     }
                     else{
@@ -308,8 +306,8 @@ public class CampManagementApplication {
                             rank = 'N';
                     }
                 }
-                Score score1 = new Score(sequence(INDEX_TYPE_SCORE),scoreIndex,rank,studentId,subject.getSubjectId());
-                scoreStore.add(score1); //등급 저장
+                Score scoreDB = new Score(sequence(INDEX_TYPE_SUBJECT),sequence(INDEX_TYPE_STUDENT),sequence(INDEX_TYPE_SCORE),scoreIndex,score,rank);
+                scoreStore.add(scoreDB); //등급 저장
             }
         }
         System.out.println("\n점수 등록 성공!");
