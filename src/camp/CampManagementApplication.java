@@ -17,6 +17,7 @@ import java.util.Scanner;
  * 구현에 도움을 주기위한 Base 프로젝트입니다. 자유롭게 이용해주세요!
  */
 public class CampManagementApplication {
+
     // 데이터 저장소
     private static List<Student> studentStore;
     private static List<Subject> subjectStore;
@@ -35,26 +36,29 @@ public class CampManagementApplication {
     private static final String INDEX_TYPE_SCORE = "SC";
 
     // 스캐너
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
 
+    /**
+     * main 메서드
+     */
     public static void main(String[] args) {
         setInitData();
         try {
             displayMainView();
+
         } catch (Exception e) {
             System.out.println("\n오류 발생!\n프로그램을 종료합니다.");
         }
     }
 
-    // 초기 데이터 생성
+    /**
+     * 초기 데이터 생성
+     */
     private static void setInitData() {
+        /*String s = "S"; // String s = new String (S); */
         studentStore = new ArrayList<>();
-        subjectStore = List.of(
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "Java",
-                        SUBJECT_TYPE_MANDATORY
-                ),
+        subjectStore = List.of( //수정 불가능
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY),
                 new Subject(
                         sequence(INDEX_TYPE_SUBJECT),
                         "객체지향",
@@ -99,7 +103,10 @@ public class CampManagementApplication {
         scoreStore = new ArrayList<>();
     }
 
-    // index 자동 증가
+    /**
+     * index 자동 증가
+     */
+    // 고유번호 만들 수 있음, 학생, 과목, 점수 ->
     private static String sequence(String type) {
         switch (type) {
             case INDEX_TYPE_STUDENT -> {
@@ -117,6 +124,9 @@ public class CampManagementApplication {
         }
     }
 
+    /**
+     * 메인 View 출력
+     */
     private static void displayMainView() throws InterruptedException {
         boolean flag = true;
         while (flag) {
@@ -141,6 +151,9 @@ public class CampManagementApplication {
         System.out.println("프로그램을 종료합니다.");
     }
 
+    /**
+     * 수강생 관리 View 출력
+     */
     private static void displayStudentView() {
         boolean flag = true;
         while (flag) {
@@ -164,26 +177,9 @@ public class CampManagementApplication {
         }
     }
 
-    // 수강생 등록
-    private static void createStudent() {
-        System.out.println("\n수강생을 등록합니다...");
-        System.out.print("수강생 이름 입력: ");
-        String studentName = sc.next();
-        List<Subject> subjectList = new ArrayList<>();
-        // 기능 구현 (필수 과목, 선택 과목)
-
-        Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName, subjectList); // 수강생 인스턴스 생성 예시 코드
-        // 기능 구현
-        System.out.println("수강생 등록 성공!\n");
-    }
-
-    // 수강생 목록 조회
-    private static void inquireStudent() {
-        System.out.println("\n수강생 목록을 조회합니다...");
-        // 기능 구현
-        System.out.println("\n수강생 목록 조회 성공!");
-    }
-
+    /**
+     * 점수 관리 View 출력
+     */
     private static void displayScoreView() {
         boolean flag = true;
         while (flag) {
@@ -209,35 +205,117 @@ public class CampManagementApplication {
         }
     }
 
+    /**
+     * 수강생 등록
+     */
+    private static void createStudent() {
+        System.out.println("\n수강생을 등록합니다...");
+        System.out.print("수강생 이름 입력: ");
+        String studentName = sc.next();
+        List<Subject> subjectList = new ArrayList<>();
+        // 기능 구현 (필수 과목, 선택 과목)
+
+        Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName, subjectList); // 수강생 인스턴스 생성 예시 코드
+        // 기능 구현
+        System.out.println("수강생 등록 성공!\n");
+    }
+
+    /**
+     * 수강생 목록 조회
+     */
+    private static void inquireStudent() {
+        System.out.println("\n수강생 목록을 조회합니다...");
+        // 기능 구현
+        System.out.println("\n수강생 목록 조회 성공!");
+    }
+
+    /**
+     * 수강생 번호 입력 받는 메서드
+     */
     private static String getStudentId() {
-        System.out.print("\n관리할 수강생의 번호를 입력하시오...");
+        System.out.print("\n관리할 수강생의 번호를 입력하세오 : ");
         return sc.next();
     }
 
-    // 수강생의 과목별 시험 회차 및 점수 등록
+
+    /**
+     * 수강생의 과목별 시험 회차 및 점수 등록
+     */
+    //수강생 id로 수강생 찾기
+
+
+
+
+    // 수강생의 과목별 시험 회차 및 점수 등록 회차 빠짐
     private static void createScore() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
-        for(Student subject : studentStore){
-            if(studentId.equals(subject.getStudentId())){
-                for (int i = 1; i < /*수강목록 갯수 */; i++){
-                    System.out.println(i + "." + );
+        for(Student student : studentStore){
+            if(studentId.equals(student.getStudentId())){
+                for (int i = 1; i <= student.getSubjects().size(); i++){
+                    System.out.println(i + "." + student.getSubjects().get(i-1).getSubjectName());
                 }
-                //점수에 따른 등급 설정 (필수 과목일시. 선택 과목일 시)
-                //점수 입력
-                //등급 저장
+                int input = Integer.parseInt(sc.next());// 과목선택
+                Subject subject = student.getSubjects().get(input-1);
+                //input을 인덱스 값으로 받아서 student 클래스에 저장되어있는 수강목록 리스트에 접근해서 과목 찾기
+                subject.getSubjectName();
+                System.out.println("점수를 등록하려는 과목이 맞으신가요? 과목: " + subject.getSubjectName());
+
+               int score = Integer.parseInt(sc.next()); //점수 입력
+               char rank = 'N';
+                //수강과목이 필수 또는 선택에 따라서 등급 차등
+                if(subject.getSubjectType().equals(SUBJECT_TYPE_MANDATORY)){
+                    if (score >= 95 && score <= 100){
+                        rank = 'A';
+                    }
+                    else if (score >= 90 && score < 95){
+                        rank = 'B';
+                    }
+                    else if (score >= 80 && score < 90){
+                        rank = 'C';
+                    }
+                    else if (score >= 70 && score < 80){
+                        rank = 'D';
+                    }
+                    else if (score >= 60 && score < 70) {
+                        rank = 'F';
+                    }
+                    else{
+                        rank = 'N';
+                    }
+                }
+                else if(subject.getSubjectType().equals(SUBJECT_TYPE_CHOICE)){
+                    switch (score/10){
+                        case 10:
+                        case 9:
+                            rank = 'A';
+                            break;
+                        case 8:
+                            rank = 'B';
+                            break;
+                        case 7:
+                            rank = 'C';
+                            break;
+                        case 6:
+                            rank = 'D';
+                            break;
+                        case 5:
+                            rank = 'F';
+                            break;
+                        default:
+                            rank = 'N';
+                    }
+                }
+                Score scoreDB = new Score(sequence(INDEX_TYPE_SUBJECT),sequence(INDEX_TYPE_STUDENT),sequence(INDEX_TYPE_SCORE),scoreIndex,score,rank);
+                scoreStore.add(scoreDB); //등급 저장
             }
         }
-
-
-
-
-
-
         System.out.println("\n점수 등록 성공!");
     }
 
-    // 수강생의 과목별 회차 점수 수정
+    /**
+     * 수강생의 과목별 회차 점수 수정
+     */
     private static void updateRoundScoreBySubject() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (수정할 과목 및 회차, 점수)
@@ -246,7 +324,9 @@ public class CampManagementApplication {
         System.out.println("\n점수 수정 성공!");
     }
 
-    // 수강생의 특정 과목 회차별 등급 조회
+    /**
+     * 수강생의 특정 과목 회차별 등급 조회
+     */
     private static void inquireRoundGradeBySubject() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (조회할 특정 과목)
@@ -261,5 +341,4 @@ public class CampManagementApplication {
         // 기능 구현
         System.out.println("\n등급 조회 성공!");
     }
-
 }
