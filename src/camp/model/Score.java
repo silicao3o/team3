@@ -40,5 +40,4 @@ public class Score{
     public String getSubjectId() {
         return subjectId;
     }
-
 }
