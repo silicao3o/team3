@@ -236,6 +236,7 @@ public class CampManagementApplication {
                 for (int i = 1; i <= student.getSubjects().size(); i++){
                     System.out.println(i + "." + student.getSubjects().get(i-1).getSubjectName());
                 }
+                //출력문 : 과목의 번호를 입력해주세요
                 int input = Integer.parseInt(sc.next());// 과목선택
                 Subject subject = student.getSubjects().get(input-1);
                 //input을 인덱스 값으로 받아서 student 클래스에 저장되어있는 수강목록 리스트에 접근해서 과목 찾기
@@ -287,8 +288,9 @@ public class CampManagementApplication {
                             rank = 'N';
                     }
                 }
-                Score scoreDB = new Score(subject.getSubjectId(),studentId,sequence(INDEX_TYPE_SCORE),scoreIndex,score,rank);
-                scoreStore.add(scoreDB); //등급 저장
+                Score scoreDB = new Score(subject.getSubjectId(),studentId,sequence(INDEX_TYPE_SCORE),score,rank);
+                scoreDB.increaseTestCount(); // 회차 증가
+                scoreStore.add(scoreDB);//등급 저장
             }
         }
         System.out.println("\n점수 등록 성공!");
