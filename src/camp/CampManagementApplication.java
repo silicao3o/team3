@@ -6,6 +6,7 @@ import camp.model.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 /**
@@ -59,48 +60,23 @@ public class CampManagementApplication {
         studentStore = new ArrayList<>();
         subjectStore = List.of( //수정 불가능
                 new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "객체지향",
-                        SUBJECT_TYPE_MANDATORY
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "Spring",
-                        SUBJECT_TYPE_MANDATORY
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "JPA",
-                        SUBJECT_TYPE_MANDATORY
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "MySQL",
-                        SUBJECT_TYPE_MANDATORY
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "디자인 패턴",
-                        SUBJECT_TYPE_CHOICE
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "Spring Security",
-                        SUBJECT_TYPE_CHOICE
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "Redis",
-                        SUBJECT_TYPE_CHOICE
-                ),
-                new Subject(
-                        sequence(INDEX_TYPE_SUBJECT),
-                        "MongoDB",
-                        SUBJECT_TYPE_CHOICE
-                )
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "JPA", SUBJECT_TYPE_MANDATORY),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "MySQL", SUBJECT_TYPE_MANDATORY),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "디자인 패턴", SUBJECT_TYPE_CHOICE),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring Security", SUBJECT_TYPE_CHOICE),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "Redis", SUBJECT_TYPE_CHOICE),
+                new Subject(sequence(INDEX_TYPE_SUBJECT), "MongoDB", SUBJECT_TYPE_CHOICE)
         );
         scoreStore = new ArrayList<>();
+
+        // 테스트용 더미 데이터
+        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT),"테스트1",new ArrayList<Subject>()));
+        studentStore.get(0).getSubjects().add(subjectStore.get(0));
+        studentStore.get(0).getSubjects().add(subjectStore.get(1));
+        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT),"테스트2",new ArrayList<Subject>()));
+        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT),"테스트3",new ArrayList<Subject>()));
     }
 
     /**
@@ -226,6 +202,11 @@ public class CampManagementApplication {
     private static void inquireStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
         // 기능 구현
+        /* 준모님 확인용 테스트 코드 */
+        for (Student student : studentStore) {
+            System.out.println("id : " + student.getStudentId() + ", name : " + student.getStudentName());
+        }
+
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
@@ -306,7 +287,7 @@ public class CampManagementApplication {
                             rank = 'N';
                     }
                 }
-                Score scoreDB = new Score(sequence(INDEX_TYPE_SUBJECT),sequence(INDEX_TYPE_STUDENT),sequence(INDEX_TYPE_SCORE),scoreIndex,score,rank);
+                Score scoreDB = new Score(subject.getSubjectId(),studentId,sequence(INDEX_TYPE_SCORE),scoreIndex,score,rank);
                 scoreStore.add(scoreDB); //등급 저장
             }
         }
@@ -330,8 +311,44 @@ public class CampManagementApplication {
     private static void inquireRoundGradeBySubject() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (조회할 특정 과목)
-        System.out.println("회차별 등급을 조회합니다...");
-        // 기능 구현
-        System.out.println("\n등급 조회 성공!");
+        Optional<Student> select_Student = studentStore.stream().filter(student ->student.getStudentId().equals(studentId)).findAny();
+        if(select_Student.isPresent()){
+            if(select_Student.get().getSubjects().size()<1){
+                System.out.println("Error!! 학생이 수강하고 있는 과목이 없습니다!");
+                return;
+            }
+            List<Subject> subjects = select_Student.get().getSubjects();
+            System.out.println("---------- 수강 목록 ----------");
+            int i=1;
+            for(Subject subject : subjects){
+                System.out.println(i + ". " + subject.getSubjectName());
+                i++;
+            }
+            System.out.print("------------------------------");
+            System.out.print("\n조회할 과목의 번호를 입력해주세요 : ");
+            //String subjectName = sc.next();
+            int subjectNumber = sc.nextInt();
+
+            //subjectStore
+            // 학생id 와 과목id 모두 포함하는 점수 찾기
+            List<Score> scoreList = scoreStore.stream().filter(
+                    score -> score.getStudentId().equals(studentId) && score.getSubjectId().equals(subjects.get(subjectNumber-1).getSubjectId()) )
+                    .toList();
+            //.forEach(score -> System.out.println("회차 : " + "(개발중)   등급 : " + score.getRank()));
+            if(scoreList.size() == 0){
+                System.out.println("Error!! 해당 과목 점수가 없습니다!");
+                return;
+            }
+            else
+            {
+                for(Score score : scoreList){
+                    System.out.println("회차 : " + "(개발중)   등급 : " + score.getRank());
+                }
+            }
+            // 기능 구현
+            System.out.println("\n등급 조회 완료!!");
+        }
+        else
+            System.out.println("Error!! 선택된 학생이 존재하지 않습니다!!");
     }
 }
