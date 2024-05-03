@@ -231,42 +231,35 @@ public class CampManagementApplication {
     private static void createScore() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
-        for(Student student : studentStore){
-            if(studentId.equals(student.getStudentId())){
-                for (int i = 1; i <= student.getSubjects().size(); i++){
-                    System.out.println(i + "." + student.getSubjects().get(i-1).getSubjectName());
+        for(Student student : studentStore) {//저장된 학생에서 하나하나 찾아보고 학생을 데려옴
+            if(student.getStudentId().equals(studentId)) {//특정된 학생이 맞는지 검증
+                for(int i = 1; i <= student.getSubjects().size(); i++) {
+                    System.out.println(i + ". " + student.getSubjects().get(i-1).getSubjectName());  //학생이 듣는 과목 출력
                 }
-                //출력문 : 과목의 번호를 입력해주세요
-                int input = Integer.parseInt(sc.next());// 과목선택
-                Subject subject = student.getSubjects().get(input-1);
-                //input을 인덱스 값으로 받아서 student 클래스에 저장되어있는 수강목록 리스트에 접근해서 과목 찾기
+                System.out.println("점수 추가를 하려는 과목의 번호를 입력해주세요.");
+                int input = Integer.parseInt(sc.next()); //과목 번호로 input받아서 그 과목에 접근하기
+                Subject subject = student.getSubjects().get(input-1); //input을 인덱스 값으로 받아서 student 클래스에 저장되어있는 수강목록 리스트에 접근해서 과목 찾기
                 subject.getSubjectName();
-                System.out.println("점수를 등록하려는 과목이 맞으신가요? 과목: " + subject.getSubjectName());
-
-               int score = Integer.parseInt(sc.next()); //점수 입력
-               char rank = 'N';
+                System.out.println("점수를 입력해주세요...");
+                int score = Integer.parseInt(sc.next());//점수 입력
+                char rank = 'N'; // 등급 N으로 초기화
                 //수강과목이 필수 또는 선택에 따라서 등급 차등
-                if(subject.getSubjectType().equals(SUBJECT_TYPE_MANDATORY)){
-                    if (score >= 95 && score <= 100){
+                if (subject.getSubjectType().equals(SUBJECT_TYPE_MANDATORY)) { // 필수과목 : 점수에 관한 등급 메기는 제어문
+                    if (score >= 95 && score <= 100) {
                         rank = 'A';
-                    }
-                    else if (score >= 90 && score < 95){
+                    } else if (score >= 90 && score < 95) {
                         rank = 'B';
-                    }
-                    else if (score >= 80 && score < 90){
+                    } else if (score >= 80 && score < 90) {
                         rank = 'C';
-                    }
-                    else if (score >= 70 && score < 80){
+                    } else if (score >= 70 && score < 80) {
                         rank = 'D';
-                    }
-                    else if (score >= 60 && score < 70) {
+                    } else if (score >= 60 && score < 70) {
                         rank = 'F';
-                    }
-                    else{
+                    } else {
                         rank = 'N';
                     }
                 }
-                else if(subject.getSubjectType().equals(SUBJECT_TYPE_CHOICE)){
+                else if(subject.getSubjectType().equals(SUBJECT_TYPE_CHOICE)){ // 선택과목 : 점수에 관한 등급 메기는 제어문
                     switch (score/10){
                         case 10:
                         case 9:
@@ -288,9 +281,15 @@ public class CampManagementApplication {
                             rank = 'N';
                     }
                 }
-                Score scoreDB = new Score(subject.getSubjectId(),studentId,sequence(INDEX_TYPE_SCORE),score,rank);
-                scoreDB.increaseTestCount(); // 회차 증가
-                scoreStore.add(scoreDB);//등급 저장
+                Score scoreDB = new Score(subject.getSubjectId(), studentId, sequence(INDEX_TYPE_SCORE),score,rank);//score 객체 생성
+                scoreDB.increaseTestCount();//회차 증가
+                System.out.println(student.getStudentName() + "학생의 " + subject.getSubjectName() + "과목 " + scoreDB.getTestCount() + "회차" + " 점수는 " + score + "점이고, 등급은 " + rank +"입니다.");
+                System.out.println("등급을 저장하시려면 Yes를 입력해주세요.");
+                String stroage = sc.next();
+                if(stroage.equals("Yes")) {
+                    scoreStore.add(scoreDB);//등급 저장
+                }
+                //예외처리 처음으로
             }
         }
         System.out.println("\n점수 등록 성공!");
