@@ -3,7 +3,7 @@ package camp.model;
 
 import java.util.List;
 
-public class Student {
+public class Student  {
 
     private String studentId;
     private String studentName;
@@ -25,5 +25,4 @@ public class Student {
     }
     
     public List<Subject> getSubjects() {return subjects;}
-
 }
