@@ -232,7 +232,7 @@ public class CampManagementApplication {
                     System.out.println("해당 리스트(Java, 객체지향, Spring, JPA, MySQL) 중에서만 선택하세요!");
                 }
             } while (!isValidSubject(subjectName));
-            mandatorySubjects.add(new Subject("SU",subjectName, "MANDATORY"));
+            mandatorySubjects.add(new Subject(sequence(INDEX_TYPE_SUBJECT), subjectName, "MANDATORY"));
         }
 
         // 선택 과목 선택
@@ -247,7 +247,7 @@ public class CampManagementApplication {
                     System.out.println("해당 리스트(디자인 패턴, Spring Security, Redis, MongoDB) 중에서만 선택하세요!");
                 }
             } while (!isValidSubject(subjectName));
-            choiceSubjects.add(new Subject("SU",subjectName, "CHOICE"));
+            choiceSubjects.add(new Subject(sequence(INDEX_TYPE_SUBJECT), subjectName, "CHOICE"));
         }
 
         List<Subject> allSubjects = new ArrayList<>();
