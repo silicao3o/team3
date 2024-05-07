@@ -200,13 +200,13 @@ public class CampManagementApplication {
      * 수강생 목록 조회
      */
     private static void inquireStudent() {
+        String studentId = getStudentId();
         System.out.println("\n수강생 목록을 조회합니다...");
-        // 기능 구현
-        /* 준모님 확인용 테스트 코드 */
-        for (Student student : studentStore) {
-            System.out.println("id : " + student.getStudentId() + ", name : " + student.getStudentName());
+        for(int i = 0; i < studentStore.size(); i++){
+            String studentName = studentStore.get(i).getStudentName();
+            System.out.println((i+1) + ". " + "ID: " + studentId + ", Name: " + studentName);
         }
-
+        System.out.println("총 수강생은  " + studentStore.size() + "명 입니다.");
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
@@ -232,7 +232,7 @@ public class CampManagementApplication {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         System.out.println("시험 점수를 등록합니다...");
         for(Student student : studentStore) {//저장된 학생에서 하나하나 찾아보고 학생을 데려옴
-            if(student.getStudentId().equals(studentId)) {//특정된 학생이 맞는지 검증
+            if(studentId.equals(student.getStudentId())) {//특정된 학생이 맞는지 검증
                 for(int i = 1; i <= student.getSubjects().size(); i++) {
                     System.out.println(i + ". " + student.getSubjects().get(i-1).getSubjectName());  //학생이 듣는 과목 출력
                 }
@@ -244,7 +244,7 @@ public class CampManagementApplication {
                 int score = Integer.parseInt(sc.next());//점수 입력
                 char rank = 'N'; // 등급 N으로 초기화
                 //수강과목이 필수 또는 선택에 따라서 등급 차등
-                if (subject.getSubjectType().equals(SUBJECT_TYPE_MANDATORY)) { // 필수과목 : 점수에 관한 등급 메기는 제어문
+                if (SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) { // 필수과목 : 점수에 관한 등급 메기는 제어문
                     if (score >= 95 && score <= 100) {
                         rank = 'A';
                     } else if (score >= 90 && score < 95) {
@@ -259,7 +259,7 @@ public class CampManagementApplication {
                         rank = 'N';
                     }
                 }
-                else if(subject.getSubjectType().equals(SUBJECT_TYPE_CHOICE)){ // 선택과목 : 점수에 관한 등급 메기는 제어문
+                else if(SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())){ // 선택과목 : 점수에 관한 등급 메기는 제어문
                     switch (score/10){
                         case 10:
                         case 9:
@@ -281,15 +281,14 @@ public class CampManagementApplication {
                             rank = 'N';
                     }
                 }
-                Score scoreDB = new Score(subject.getSubjectId(), studentId, sequence(INDEX_TYPE_SCORE),score,rank);//score 객체 생성
+                Score scoreDB = new Score(subject.getSubjectId(), studentId, sequence(INDEX_TYPE_SCORE),score,rank); //score 객체 생성
                 scoreDB.increaseTestCount();//회차 증가
                 System.out.println(student.getStudentName() + "학생의 " + subject.getSubjectName() + "과목 " + scoreDB.getTestCount() + "회차" + " 점수는 " + score + "점이고, 등급은 " + rank +"입니다.");
                 System.out.println("등급을 저장하시려면 Yes를 입력해주세요.");
                 String stroage = sc.next();
-                if(stroage.equals("Yes")) {
+                if("Yes".equals(stroage)) {
                     scoreStore.add(scoreDB);//등급 저장
                 }
-                //예외처리 처음으로
             }
         }
         System.out.println("\n점수 등록 성공!");
