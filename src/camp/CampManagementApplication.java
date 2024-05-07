@@ -43,9 +43,9 @@ public class CampManagementApplication {
      */
     public static void main(String[] args) {
         setInitData();
+        createStudent(); // 수강생 등록 메서드 호출
         try {
             displayMainView();
-
         } catch (Exception e) {
             System.out.println("\n오류 발생!\n프로그램을 종료합니다.");
         }
