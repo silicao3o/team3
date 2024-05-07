@@ -1,49 +1,72 @@
 package camp.model;
 
-public class Score{
+public class Score {
 
-    private String subjectId;
-    private String studentId;
     private String scoreId;
-    private int testCount; // 시험회차
-    private int testScore; // 점수
+    private String studentId;
+    private String subjectId;
+    private int round; // 회차
+    private int score; // 점수
     private char rank; // 등급
 
-
-    public Score(String subjectId, String studentId, String scoreId, int testScore,char rank) {
-        this.subjectId = subjectId;
-        this.studentId = studentId;
+    public Score(String scoreId, String studentId, String subjectId, int score, char rank) {
         this.scoreId = scoreId;
-        this.testCount = 0;
-        this.testScore = testScore;
+        this.studentId = studentId;
+        this.subjectId = subjectId;
+        this.score = score;
         this.rank = rank;
     }
 
-    public void increaseTestCount(){ // 시험회차 증가
-        testCount++;
+    // 시험 회차 증가 메서드
+    public void increaseRound() {
+        round++;
     }
-    // Getter
+
     public String getScoreId() {
         return scoreId;
     }
 
-    public int getTestCount() {
-        return testCount;
-    }
-
-    public char getRank() {
-        return rank;
+    public void setScoreId(String scoreId) {
+        this.scoreId = scoreId;
     }
 
     public String getStudentId() {
         return studentId;
     }
 
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
     public String getSubjectId() {
         return subjectId;
     }
 
-    public int getTestScore() {
-        return testScore;
+    public void setSubjectId(String subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public char getRank() {
+        return rank;
+    }
+
+    public void setRank(char rank) {
+        this.rank = rank;
     }
 }
