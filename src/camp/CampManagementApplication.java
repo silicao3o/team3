@@ -162,7 +162,7 @@ public class CampManagementApplication {
                 System.out.println(i + ". " + subject.getSubjectName());
                 i++;
             }
-            System.out.print("———————————————");
+            System.out.print("————————————————————");
             System.out.print("\n조회할 과목의 번호를 입력해주세요 : ");
             //String subjectName = sc.next();
             int subjectNumber = sc.nextInt();
@@ -178,7 +178,7 @@ public class CampManagementApplication {
                 return;
             } else {
                 for (Score score : scoreList) {
-                    System.out.println("회차 : " + "(개발중)   등급 : " + score.getRank());
+                    System.out.println("회차 : " + score.getRound() + "   등급 : " + score.getRank());
                 }
             }
             // 기능 구현
