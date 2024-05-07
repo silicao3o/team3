@@ -1,6 +1,7 @@
 package camp.model;
 
 public class Subject {
+
     private String subjectId;
     private String subjectName;
     private String subjectType;
@@ -23,5 +24,4 @@ public class Subject {
     public String getSubjectType() {
         return subjectType;
     }
-
 }
