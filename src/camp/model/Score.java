@@ -15,6 +15,7 @@ public class Score {
         this.subjectId = subjectId;
         this.score = score;
         this.rank = rank;
+        this.round = 0;
     }
 
     // 시험 회차 증가 메서드

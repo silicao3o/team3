@@ -61,11 +61,12 @@ public class CampManagementApplication {
      * 수강생 목록 조회
      */
     private static void inquireStudent() {
-        String studentId = getStudentId();
         System.out.println("\n수강생 목록을 조회합니다...");
-        for(int i = 0; i < studentStore.size(); i++){
+
+        for (int i = 0; i < studentStore.size(); i++) {
+            String studentId = studentStore.get(i).getStudentId();
             String studentName = studentStore.get(i).getStudentName();
-            System.out.println((i+1) + ". " + "ID: " + studentId + ", Name: " + studentName);
+            System.out.println((i + 1) + ". " + "ID: " + studentId + ", Name: " + studentName);
         }
         System.out.println("총 수강생은  " + studentStore.size() + "명 입니다.");
         System.out.println("\n수강생 목록 조회 성공!");
@@ -93,6 +94,7 @@ public class CampManagementApplication {
 
         // 새로운 Score 객체 생성
         Score score = new Score(sequence(INDEX_TYPE_SCORE), studentId, subject.getSubjectId(), inputScore, rank);
+        score.increaseRound(); // 회차 증가
 
         System.out.println(student.getStudentName() + " 학생의 " + subject.getSubjectName() + " 과목 " +
                 score.getRound() + " 회차의 점수는 " + inputScore + " 점이고, 등급은 " + rank + " 입니다.");
@@ -100,7 +102,6 @@ public class CampManagementApplication {
         checkSave(); // 저장 여부 확인 (취소할 시 성적 관리 View로 돌아감)
 
         scoreStore.add(score); // 성적 저장
-        score.increaseRound(); // 회차 증가
     }
 
     /**
@@ -147,16 +148,17 @@ public class CampManagementApplication {
     private static void inquireRoundGradeBySubject() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (조회할 특정 과목)
-        Optional<Student> select_Student = studentStore.stream().filter(student ->student.getStudentId().equals(studentId)).findAny();
-        if(select_Student.isPresent()){
-            if(select_Student.get().getSubjects().size()<1){
+        Optional<Student> select_Student = studentStore.stream().filter(student -> student.getStudentId().equals(studentId)).findAny();
+        if (select_Student.isPresent()) {
+
+            if (select_Student.get().getSubjects().size() < 1) {
                 System.out.println("Error!! 학생이 수강하고 있는 과목이 없습니다!");
                 return;
             }
             List<Subject> subjects = select_Student.get().getSubjects();
             System.out.println("————— 수강 목록 —————");
-            int i=1;
-            for(Subject subject : subjects){
+            int i = 1;
+            for (Subject subject : subjects) {
                 System.out.println(i + ". " + subject.getSubjectName());
                 i++;
             }
@@ -168,24 +170,22 @@ public class CampManagementApplication {
             //subjectStore
             // 학생id 와 과목id 모두 포함하는 점수 찾기
             List<Score> scoreList = scoreStore.stream().filter(
-                            score -> score.getStudentId().equals(studentId) && score.getSubjectId().equals(subjects.get(subjectNumber-1).getSubjectId()) )
+                            score -> score.getStudentId().equals(studentId) && score.getSubjectId().equals(subjects.get(subjectNumber - 1).getSubjectId()))
                     .toList();
             //.forEach(score -> System.out.println("회차 : " + "(개발중)   등급 : " + score.getRank()));
-            if(scoreList.size() == 0){
+            if (scoreList.size() == 0) {
                 System.out.println("Error!! 해당 과목 점수가 없습니다!");
                 return;
-            }
-            else
-            {
-                for(Score score : scoreList){
+            } else {
+                for (Score score : scoreList) {
                     System.out.println("회차 : " + "(개발중)   등급 : " + score.getRank());
                 }
             }
             // 기능 구현
             System.out.println("\n등급 조회 완료!!");
-        }
-        else
+        } else {
             System.out.println("Error!! 선택된 학생이 존재하지 않습니다!!");
+        }
     }
 
     // 수강생 ID 입력받고 반환
@@ -244,7 +244,7 @@ public class CampManagementApplication {
     // 성적 저장 여부 확인
     private static void checkSave() {
         System.out.print("저장하려면 y를, 취소하려면 아무거나 입력해주세요: ");
-        if (Objects.equals(sc.nextLine(), "y")) {
+        if (Objects.equals(sc.next(), "y")) {
             System.out.println("\n저장되었습니다.\n");
         } else {
             System.out.println("\n취소되었습니다.\n");
@@ -329,9 +329,8 @@ public class CampManagementApplication {
 
     // 초기 데이터 생성
     private static void setInitData() {
-        /*String s = "S"; // String s = new String (S); */
         studentStore = new ArrayList<>();
-        subjectStore = List.of( //수정 불가능
+        subjectStore = List.of ( //수정 불가능
                 new Subject(sequence(INDEX_TYPE_SUBJECT), "Java", SUBJECT_TYPE_MANDATORY),
                 new Subject(sequence(INDEX_TYPE_SUBJECT), "객체지향", SUBJECT_TYPE_MANDATORY),
                 new Subject(sequence(INDEX_TYPE_SUBJECT), "Spring", SUBJECT_TYPE_MANDATORY),
@@ -345,11 +344,16 @@ public class CampManagementApplication {
         scoreStore = new ArrayList<>();
 
         // 테스트용 더미 데이터
-        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT),"테스트1",new ArrayList<Subject>()));
-        studentStore.get(0).getSubjects().add(subjectStore.get(0));
-        studentStore.get(0).getSubjects().add(subjectStore.get(1));
-        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT),"테스트2",new ArrayList<Subject>()));
-        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT),"테스트3",new ArrayList<Subject>()));
+        List<Subject> l1 = new ArrayList<>();
+
+        l1.add(new Subject("1", "Java", SUBJECT_TYPE_MANDATORY));
+        l1.add(new Subject("2", "Spring", SUBJECT_TYPE_MANDATORY));
+        l1.add(new Subject("3", "JPA", SUBJECT_TYPE_MANDATORY));
+        l1.add(new Subject("4", "MySQL", SUBJECT_TYPE_MANDATORY));
+
+        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT), "테스트1", l1));
+        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT), "테스트2", new ArrayList<Subject>()));
+        studentStore.add(new Student(sequence(INDEX_TYPE_STUDENT), "테스트3", new ArrayList<Subject>()));
     }
 
     // index 자동 증가
