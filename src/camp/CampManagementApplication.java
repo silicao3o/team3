@@ -47,14 +47,57 @@ public class CampManagementApplication {
      */
     private static void createStudent() {
         System.out.println("\n수강생을 등록합니다...");
+
+        // 수강생 고유번호 입력
+        System.out.print("사용할 수강생 고유번호를 입력하세요: ");
+        String studentId = sc.next();
+
+        // 수강생 이름 입력
         System.out.print("수강생 이름 입력: ");
         String studentName = sc.next();
-        List<Subject> subjectList = new ArrayList<>();
-        // 기능 구현 (필수 과목, 선택 과목)
 
-        Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName, subjectList); // 수강생 인스턴스 생성 예시 코드
-        // 기능 구현
-        System.out.println("수강생 등록 성공!\n");
+        // 선택한 과목을 저장할 리스트
+        List<Subject> selectedSubjects = new ArrayList<>();
+
+        // 필수 과목 선택
+        System.out.println("필수 과목 3가지를 선택하세요:");
+        for (int i = 0; i < 3; i++) {
+            System.out.println("과목 목록:");
+            for (Subject subject : subjectStore) {
+                if (SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) {
+                    System.out.println(subject.getSubjectName());
+                }
+            }
+            String subjectName = sc.next();
+            for (Subject subject : subjectStore) {
+                if (subject.getSubjectName().equals(subjectName) && SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) {
+                    selectedSubjects.add(subject);
+                    break;
+                }
+            }
+        }
+
+        // 선택 과목 선택
+        System.out.println("선택 과목 2가지를 선택하세요:");
+        for (int i = 0; i < 2; i++) {
+            System.out.println("과목 목록:");
+            for (Subject subject : subjectStore) {
+                if (SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())) {
+                    System.out.println(subject.getSubjectName());
+                }
+            }
+            String subjectName = sc.next();
+            for (Subject subject : subjectStore) {
+                if (subject.getSubjectName().equals(subjectName) && SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())) {
+                    selectedSubjects.add(subject);
+                    break;
+                }
+            }
+        }
+
+        // 저장
+        Student newStudent = new Student(studentId, studentName, selectedSubjects);
+        studentStore.add(newStudent);
     }
 
     /**
