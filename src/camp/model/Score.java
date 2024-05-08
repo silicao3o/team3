@@ -15,12 +15,29 @@ public class Score {
         this.subjectId = subjectId;
         this.score = score;
         this.rank = rank;
-        this.round = 0;
+        this.round = 1;
     }
 
     // 시험 회차 증가 메서드
-    public void increaseRound() {
-        round++;
+    public boolean increaseRound(){
+        if(checkRound()){
+            round++;
+            return true;
+        }
+        else {
+            System.out.println("10회차가 넘었습니다.");
+            System.out.println("어디로 돌아갑니다.");
+            return false;
+        }
+    }
+
+    public boolean checkRound() {
+        if(round >= 1 && round < 4){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public String getScoreId() {
