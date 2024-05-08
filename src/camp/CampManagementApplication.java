@@ -45,17 +45,70 @@ public class CampManagementApplication {
     /**
      * 수강생 등록
      */
+     
     private static void createStudent() {
         System.out.println("\n수강생을 등록합니다...");
+
+        // 수강생 이름 입력
         System.out.print("수강생 이름 입력: ");
         String studentName = sc.next();
-        List<Subject> subjectList = new ArrayList<>();
-        // 기능 구현 (필수 과목, 선택 과목)
 
-        Student student = new Student(sequence(INDEX_TYPE_STUDENT), studentName, subjectList); // 수강생 인스턴스 생성 예시 코드
-        // 기능 구현
-        System.out.println("수강생 등록 성공!\n");
+        // 선택한 과목을 저장할 리스트
+        List<Subject> selectedSubjects = new ArrayList<>();
+
+        // 필수 과목 선택
+        int mandatoryCount = 0;
+        while (mandatoryCount < 3) {
+            System.out.println("과목 목록:");
+            for (Subject subject : subjectStore) {
+                if (SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) {
+                    System.out.println(subject.getSubjectName());
+                }
+            }
+            String subjectName = sc.next();
+            for (Subject subject : subjectStore) {
+                if (subject.getSubjectName().equals(subjectName) && SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) {
+                    selectedSubjects.add(subject);
+                    mandatoryCount++;
+                    break;
+                }
+            }
+            if (mandatoryCount >= 3)
+                break;
+            System.out.print("더 많은 필수 과목을 추가하시겠습니까?(Y/N): ");
+            if (!sc.next().equalsIgnoreCase("Y"))
+                break;
+        }
+
+        // 선택 과목 선택
+        int choiceCount = 0;
+        while (choiceCount < 2) {
+            System.out.println("과목 목록:");
+            for (Subject subject : subjectStore) {
+                if (SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())) {
+                    System.out.println(subject.getSubjectName());
+                }
+            }
+            String subjectName = sc.next();
+            for (Subject subject : subjectStore) {
+                if (subject.getSubjectName().equals(subjectName) && SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())) {
+                    selectedSubjects.add(subject);
+                    choiceCount++;
+                    break;
+                }
+            }
+            if (choiceCount >= 2)
+                break;
+            System.out.print("더 많은 선택 과목을 추가하시겠습니까?(Y/N): ");
+            if (!sc.next().equalsIgnoreCase("Y"))
+                break;
+        }
+
+        // 저장
+        Student newStudent = new Student(sequence(INDEX_TYPE_STUDENT), studentName, selectedSubjects);
+        studentStore.add(newStudent);
     }
+
 
     /**
      * 수강생 목록 조회
