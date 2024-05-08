@@ -234,14 +234,14 @@ public class CampManagementApplication {
     private static void inquireRoundGradeBySubject() {
         String studentId = getStudentId(); // 관리할 수강생 고유 번호
         // 기능 구현 (조회할 특정 과목)
-        Optional<Student> select_Student = studentStore.stream().filter(student -> student.getStudentId().equals(studentId)).findAny();
-        if (select_Student.isPresent()) {
+        Optional<Student> selectStudent = studentStore.stream().filter(student -> student.getStudentId().equals(studentId)).findAny();
+        if (selectStudent.isPresent()) {
 
-            if (select_Student.get().getSubjects().size() < 1) {
+            if (selectStudent.get().getSubjects().size() < 1) {
                 System.out.println("Error!! 학생이 수강하고 있는 과목이 없습니다!");
                 return;
             }
-            List<Subject> subjects = select_Student.get().getSubjects();
+            List<Subject> subjects = selectStudent.get().getSubjects();
             System.out.println("————— 수강 목록 —————");
             int i = 1;
             for (Subject subject : subjects) {
