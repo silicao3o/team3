@@ -46,7 +46,7 @@ public class CampManagementApplication {
      * 수강생 등록
      */
 
-    private static void createStudent() {
+        private static void createStudent() {
         System.out.println("\n수강생을 등록합니다...");
 
         // 수강생 이름 입력
@@ -57,15 +57,15 @@ public class CampManagementApplication {
         List<Subject> selectedSubjects = new ArrayList<>();
 
         // 필수 과목 선택
-
+        int displayCount = 0;
         int mandatoryCount = 0;
         while (true) {
-            int displayCount = 0;
+
             if (mandatoryCount < 3) {
                 System.out.println("과목 목록:");
                 for (Subject subject : subjectStore) {
                     if (SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) {
-                        System.out.print(subject.getSubjectName() + " ");
+                        System.out.print(subject.getSubjectName() + ",");
                     }
                 }
                 System.out.println();
@@ -95,13 +95,13 @@ public class CampManagementApplication {
                 }
             }
         }
+
         sc.nextLine();
-
         // 선택 과목 선택
-
+        int displayCount2 = 0;
         int choiceCount = 0;
         while (true) {
-            int displayCount = 0;
+
             if (choiceCount < 2) {
                 System.out.println("과목 목록:");
                 for (Subject subject : subjectStore) {
@@ -116,8 +116,8 @@ public class CampManagementApplication {
                     if (subject.getSubjectName().equals(subjectName) && SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())) {
                         selectedSubjects.add(subject);
                         choiceCount++;
-                        displayCount++;
-                        System.out.println("현재 등록한 선택 과목 수: " + displayCount);
+                        displayCount2++;
+                        System.out.println("현재 등록한 선택 과목 수: " + displayCount2);
                         found = true;
                         break;
                     }
@@ -125,6 +125,7 @@ public class CampManagementApplication {
                 if (!found) {
                     System.out.println("해당 과목을 찾을 수 없습니다. 다시 입력해주세요.");
                 }
+
             } else {
                 System.out.println("과목을 추가로 더 입력하시겠습니까? (Y/N)");
                 String answer = sc.next();
@@ -136,6 +137,7 @@ public class CampManagementApplication {
                 }
             }
         }
+
         // 저장
         Student newStudent = new Student(sequence(INDEX_TYPE_STUDENT), studentName, selectedSubjects);
         studentStore.add(newStudent);
