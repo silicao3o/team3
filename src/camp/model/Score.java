@@ -1,7 +1,6 @@
 package camp.model;
 
 public class Score {
-
     private String scoreId;
 
     public Score(String seq) {
@@ -12,4 +11,5 @@ public class Score {
     public String getScoreId() {
         return scoreId;
     }
+
 }
