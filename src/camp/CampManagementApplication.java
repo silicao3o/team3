@@ -133,23 +133,20 @@ public class CampManagementApplication {
 
         System.out.print("점수를 입력해주세요: ");
 
-        int inputScore = -1;
-        do{
-            try {
-                inputScore = enterScore();
-            }catch (InputMismatchException e){
-            }
-        }while (inputScore < 0);
+        int inputScore = enterScore();
 
         char rank = getRank(subject, inputScore); // 과목 타입에 따른 성적 등급
         Score score = null;
         boolean storeable = false;
-        boolean checkRound = true;
+
         // 새로운 Score 객체 생성
         for(Score scoreCheck : scoreStore){
             if(scoreCheck.getSubjectId().equals(subject.getSubjectId()) && scoreCheck.getStudentId().equals(student.getStudentId())){
-                checkRound = scoreCheck.increaseRound();
+                boolean checkRound = scoreCheck.increaseRound();
                 score = scoreCheck;
+                if(!checkRound){
+                    displayScoreView();
+                }
                 break;
             }
         }
@@ -157,29 +154,29 @@ public class CampManagementApplication {
             score = new Score(sequence(INDEX_TYPE_SCORE),studentId,subject.getSubjectId(),inputScore,rank);
             storeable = true;
         }
-        if(!checkRound){
-            displayScoreView();
-        }
-        System.out.println(student.getStudentName() + " 학생의 " + subject.getSubjectName() + " 과목 " +
-                score.getRound() + " 회차의 점수는 " + inputScore + " 점이고, 등급은 " + rank + " 입니다.");
 
         checkSave(); // 저장 여부 확인    (취소할 시 성적 관리 View로 돌아감)
-
         if(storeable){
             scoreStore.add(score); // 성적 저장
         }
+        System.out.println(student.getStudentName() + " 학생의 " + subject.getSubjectName() + " 과목 " +
+                score.getRound() + " 회차의 점수는 " + inputScore + " 점이고, 등급은 " + rank + " 입니다.");
     }
 
 
     private static int enterScore(){
         int inputScore;// 점수 입력받는 변수
         while(true){
-            inputScore = Integer.parseInt(sc.next()); // 등록할 점수
-            if( inputScore < 0 || inputScore > 100) {
-                System.out.println("\n점수의 범위가 알맞지 않습니다." + "\n다시 입력해주세요." + "\n(점수의 범위 : 0 ~ 100)");
-            }
-            else {
-                break;
+            try{
+                inputScore = Integer.parseInt(sc.next()); // 등록할 점수
+                if( inputScore < 0 || inputScore > 100) {
+                    System.out.println("\n점수의 범위가 알맞지 않습니다." + "\n다시 입력해주세요." + "\n(점수의 범위 : 0 ~ 100)");
+                }
+                else {
+                    break;
+                }
+            }catch (NumberFormatException e){
+                System.out.println("숫자를 입력해주세요.");
             }
         }
         return inputScore;
