@@ -62,7 +62,7 @@ public class CampManagementApplication {
      */
     private static void inquireStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
-
+        System.out.println("==========================================");
         for (int i = 0; i < studentStore.size(); i++) {
             String studentId = studentStore.get(i).getStudentId();
             String studentName = studentStore.get(i).getStudentName();
@@ -70,6 +70,7 @@ public class CampManagementApplication {
         }
         System.out.println("총 수강생은  " + studentStore.size() + "명 입니다.");
         System.out.println("\n수강생 목록 조회 성공!");
+        System.out.println("=========================================");
     }
 
     /**
@@ -88,21 +89,62 @@ public class CampManagementApplication {
         Subject subject = student.getSubjects().get(input - 1); // 등록할 과목
 
         System.out.print("점수를 입력해주세요: ");
-        int inputScore = Integer.parseInt(sc.next()); // 등록할 점수
+
+        int inputScore = -1;
+        do{
+            try {
+                inputScore = enterScore();
+            }catch (InputMismatchException e){
+            }
+        }while (inputScore < 0);
 
         char rank = getRank(subject, inputScore); // 과목 타입에 따른 성적 등급
-
+        Score score = null;
+        boolean storeable = false;
+        boolean checkRound = true;
         // 새로운 Score 객체 생성
-        Score score = new Score(sequence(INDEX_TYPE_SCORE), studentId, subject.getSubjectId(), inputScore, rank);
-        score.increaseRound(); // 회차 증가
-
+        for(Score scoreCheck : scoreStore){
+            if(scoreCheck.getSubjectId().equals(subject.getSubjectId()) && scoreCheck.getStudentId().equals(student.getStudentId())){
+                checkRound = scoreCheck.increaseRound();
+                score = scoreCheck;
+                break;
+            }
+        }
+        if(score == null){
+            score = new Score(sequence(INDEX_TYPE_SCORE),studentId,subject.getSubjectId(),inputScore,rank);
+            storeable = true;
+        }
+        if(!checkRound){
+            displayScoreView();
+        }
         System.out.println(student.getStudentName() + " 학생의 " + subject.getSubjectName() + " 과목 " +
                 score.getRound() + " 회차의 점수는 " + inputScore + " 점이고, 등급은 " + rank + " 입니다.");
 
-        checkSave(); // 저장 여부 확인 (취소할 시 성적 관리 View로 돌아감)
+        checkSave(); // 저장 여부 확인    (취소할 시 성적 관리 View로 돌아감)
 
-        scoreStore.add(score); // 성적 저장
+        if(storeable){
+            scoreStore.add(score); // 성적 저장
+        }
     }
+
+
+    private static int enterScore(){
+        int inputScore;// 점수 입력받는 변수
+        while(true){
+            inputScore = Integer.parseInt(sc.next()); // 등록할 점수
+            if( inputScore < 0 || inputScore > 100) {
+                System.out.println("\n점수의 범위가 알맞지 않습니다." + "\n다시 입력해주세요." + "\n(점수의 범위 : 0 ~ 100)");
+            }
+            else {
+                break;
+            }
+        }
+        return inputScore;
+    }
+
+
+
+
 
     /**
      * 수강생의 과목별 회차 점수 수정 -> null 처리 필요!
@@ -124,6 +166,7 @@ public class CampManagementApplication {
 
         System.out.println("새로운 점수를 입력해주세요: ");
         int inputScore = Integer.parseInt(sc.next()); // 새로운 점수
+        // 점수가 0 ~ 100점 사이로 입력되게끔
 
         char rank = getRank(subject, inputScore); // 과목 타입에 따른 새로운 성적 등급
 
