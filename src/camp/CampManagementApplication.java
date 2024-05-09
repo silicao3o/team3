@@ -60,15 +60,17 @@ public class CampManagementApplication {
         int displayCount = 0;
         int mandatoryCount = 0;
         while (true) {
-
             if (mandatoryCount < 3) {
                 System.out.println("과목 목록:");
+                int index = 0;
                 for (Subject subject : subjectStore) {
                     if (SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) {
-                        System.out.print(subject.getSubjectName() + ",");
+                        index++;
+                        System.out.println(index + ". " + subject.getSubjectName());
                     }
                 }
-                System.out.println();
+                System.out.println("================");
+                System.out.println("과목의 번호를 입력해주세요.");
                 String subjectName = sc.next();
                 boolean found = false;
                 for (Subject subject : subjectStore) {
@@ -104,9 +106,11 @@ public class CampManagementApplication {
 
             if (choiceCount < 2) {
                 System.out.println("과목 목록:");
+                int index = 0;
                 for (Subject subject : subjectStore) {
                     if (SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())) {
-                        System.out.print(subject.getSubjectName() + ",");
+                        index++;
+                        System.out.println(index + ". " + subject.getSubjectName());
                     }
                 }
                 System.out.println();
