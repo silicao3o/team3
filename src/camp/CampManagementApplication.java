@@ -60,6 +60,7 @@ public class CampManagementApplication {
         int displayCount = 0;
         int mandatoryCount = 0;
         while (true) {
+
             if (mandatoryCount < 3) {
                 System.out.println("과목 목록:");
                 int index = 0;
@@ -132,7 +133,7 @@ public class CampManagementApplication {
 
             } else {
                 System.out.println("과목을 추가로 더 입력하시겠습니까? (Y/N)");
-                String answer = sc.next();
+                String answer = sc.nextLine();
                 if (answer.equalsIgnoreCase("Yes") || answer.equalsIgnoreCase("Y")) {
                     choiceCount -= 1;
                 } else {
