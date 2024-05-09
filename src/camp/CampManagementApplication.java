@@ -62,7 +62,7 @@ public class CampManagementApplication {
         while (true) {
 
             if (mandatoryCount < 3) {
-                System.out.println("과목 목록:");
+                System.out.println("필수과목 목록:");
                 for (Subject subject : subjectStore) {
                     if (SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) {
                         System.out.print(subject.getSubjectName() + ",");
@@ -103,7 +103,7 @@ public class CampManagementApplication {
         while (true) {
 
             if (choiceCount < 2) {
-                System.out.println("과목 목록:");
+                System.out.println("선택과목 목록:");
                 for (Subject subject : subjectStore) {
                     if (SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())) {
                         System.out.print(subject.getSubjectName() + ",");
@@ -128,7 +128,7 @@ public class CampManagementApplication {
 
             } else {
                 System.out.println("과목을 추가로 더 입력하시겠습니까? (Y/N)");
-                String answer = sc.next();
+                String answer = sc.nextLine();
                 if (answer.equalsIgnoreCase("Yes") || answer.equalsIgnoreCase("Y")) {
                     choiceCount -= 1;
                 } else {
